@@ -43,15 +43,15 @@ int main(int argc, char *argv[])
 
     map = MapViewOfFile(fileMap, FILE_MAP_ALL_ACCESS, 0, 0, fileSize);
     if (!fileMap) {
-        fprintf(stderr, "Error creating map view of file!");
+        fprintf(stderr, "Error creating map view of file!\n");
         CloseHandle(fileMap);
         CloseHandle(file);
         return -1;
     }
 
-    dosHeader = (PIMAGE_DOS_HEADER)map;
+    dosHeader = (PIMAGE_DOS_HEADER) map;
     if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
-        fprintf(stderr, "MZ header not found! This file is not a valid PE.");
+        fprintf(stderr, "MZ header not found! This file is not a valid PE.\n");
         //free(dosHeader);
         CloseHandle(map);
         CloseHandle(fileMap);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
     ntHeaders = (PIMAGE_NT_HEADERS) ((DWORD) map + dosHeader->e_lfanew);
     if (ntHeaders->Signature != IMAGE_NT_SIGNATURE) {
-        fprintf(stderr, "NT signature not found! This file is not a valid PE.");
+        fprintf(stderr, "NT signature not found! This file is not a valid PE.\n");
         free(ntHeaders);
         free(dosHeader);
         CloseHandle(map);
@@ -69,6 +69,9 @@ int main(int argc, char *argv[])
         CloseHandle(file);
         return -1;
     }
+
+    printf("MZ header: %X\n", dosHeader->e_magic);
+    printf("NT signature: %X\n", ntHeaders->Signature);
 
     free(ntHeaders);
     free(dosHeader);
