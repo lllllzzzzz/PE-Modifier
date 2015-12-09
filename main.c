@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     dosHeader = (PIMAGE_DOS_HEADER) map;
     if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
         fprintf(stderr, "MZ header not found! This file is not a valid PE.\n");
-        //free(dosHeader);
+        free(dosHeader);
         CloseHandle(map);
         CloseHandle(fileMap);
         CloseHandle(file);
